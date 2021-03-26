@@ -7,12 +7,13 @@ router.get('/', async (req, res) => {
   // find all tags
   try {
     const tagData = await Tag.findAll({
-      attributes: ['id', 'tag_names'],
+      attributes: ['id', 'tag_name'],
       // be sure to include its associated Product data
       include: [
         {
           model: Product,
-          attributes: ['product_name',  'id', 'category_id', 'stock', 'price']
+          attributes: ['product_name',  'id', 'category_id', 'stock', 'price'],
+          through: ProductTag
         }
       ]
     });
@@ -23,7 +24,7 @@ router.get('/', async (req, res) => {
   
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   // find a single tag by its `id`
   try {
     const tagData = await Tag.findByPk(req.params.id, {
@@ -32,7 +33,8 @@ router.get('/:id', (req, res) => {
       include: [
         {
           model: Product,
-          attributes: ['product_name',  'id', 'category_id', 'stock', 'price']
+          attributes: ['product_name',  'id', 'category_id', 'stock', 'price'],
+          through: ProductTag
         }
       ]
     });
@@ -66,7 +68,7 @@ router.put('/:id', async (req, res) => {
     });
 
     if (!tagData) {
-      res.status(404).json({ message: 'No tag has this id, please try again!'})
+      res.status(404).json({ message: 'No tag has this id!'})
       return;
     }
     res.status(200).json(taData);
@@ -84,7 +86,7 @@ router.delete('/:id', async (req, res) => {
       }
     });
     if(!tagData) {
-      res.status(404).json({ message: 'No tag has this id, please try again!'})
+      res.status(404).json({ message: 'No tag has this id!'})
       return;
     }
     res.status(200).json(tagData);
