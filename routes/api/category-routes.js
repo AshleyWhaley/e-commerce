@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
       include: [
         {
           model: Product,
-          attributes: ['product_name',  'id', 'category_id', 'stock', 'price']
+          attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
         }
       ]
     });
@@ -31,7 +31,7 @@ router.get('/:id', async (req, res) => {
       include: [
         {
           model: Product,
-          attributes: ['product_name',  'id', 'category_id', 'stock', 'price'],
+          attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
         }
       ]
     });
@@ -55,7 +55,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   // update a category by its `id` value
   try {
     const categoryData = await Category.update(req.body, { 
